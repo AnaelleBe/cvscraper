@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" class="waitwidth">
+  <head>
+    <title>form</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+    <script src="./jquery.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+    
+      $(function(){
+        $('#form_identity').on('submit', function(e){
+          e.preventDefault();
+console.log('send');
+          $.ajax({
+            method: "GET",
+            url: "http://127.0.0.1:8081",
+            data: { prenom: $('[name="prenom"]').val(), nom: $('[name="nom"]').val() }
+          });
+
+
+          $('#wait').fadeIn(1000);
+        });
+      });
+      
+    </script>
+
+  </head>
+  <body id="formbg" class="waitwidth">
+    <section id=wrapper>
+    <p> Please register to get a personalized cyber-résumé!</p>
+    <form action="http://localhost:8081/?" method="get" id="form_identity">
+      <label for="GET-name">Name :</label>
+      <input id="GET-name" type="text" name="prenom">
+
+      <label for="GET-name">Surname :</label>
+      <input id="GET-name" type="text" name="nom">
+      <input id="submit" type="submit" value="Register">
+    </form>
+</section>
+
+<div id="wait"><h1>Please wait for 30 seconds, your informations are being collected.</h1>
+  <p></p>
+
+ <div id="boutonback"> <a href="http://127.0.0.1:8081/form.html">back</a></div>
+
+</div>
+  </body>
+</html>
+
