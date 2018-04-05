@@ -6,6 +6,13 @@ var express = require('express');
 var app = express();
 var jade = require('jade');
 var pdf = require('html-pdf');
+var path = require('path');
+var fs = require('fs');
+
+var printer = require("printer");
+var util = require('util');
+var doPrint = true;
+
 
 googleSearch.resultsPerPage = 10;
 googleSearch.lang = 'fr';
@@ -82,8 +89,39 @@ app.get('/', function (req, res) {
         texts: texts
       });
 
+      pdf.create(html, options).toFile('./resume.pdf', function(err, res) {
+        if (err) return console.log(err);
+        console.log(res); // { filename: '/app/businesscard.pdf' }
+
+        var filename = path.resolve(process.cwd(), 'resume.pdf');
+        console.log('printing file name ' + filename);
+
+        fs.readFile(filename, function(err, data){
+          if(err) {
+            console.error('err:' + err);
+            return;
+          }
+
+          console.log('data type is: '+typeof(data) + ', is buffer: ' + Buffer.isBuffer(data));
+
+
+          if (doPrint == true) {
+            printer.printDirect({
+                data: data,
+                type: 'PDF',
+                success: function(id) {
+                    console.log('printed with id ' + id);
+                },
+                error: function(err) {
+                    console.error('error on printing: ' + err);
+                }
+            });
+          }
+        });
+      });
+
       res.send(html);
-    })
+    });
   });
 });
 
